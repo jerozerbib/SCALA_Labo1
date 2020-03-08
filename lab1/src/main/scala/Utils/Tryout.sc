@@ -1,22 +1,8 @@
+import Utils.Dictionary.dictionary
+import Utils.SpellChecker.getClosestWordInDictionary
+import Chat.Tokens._
+
 "hello".substring(0, 0).length
-val dictionary: Map[String, String] = Map(
-  "bonjour" -> "bonjour",
-  "hello" -> "bonjour",
-  "yo" -> "bonjour",
-  "je" -> "je",
-  "j" -> "je",
-  "suis" -> "etre",
-  "veux" -> "vouloir",
-  "aimerais" -> "vouloir",
-  "bière" -> "biere",
-  "bières" -> "biere",
-  "croissant" -> "croissant",
-  "croissants" -> "croissant",
-  "et" -> "et",
-  "ou" -> "ou",
-  "svp" -> "svp",
-  "stp" -> "svp"
-)
 
 def stringDistance(s1: String, s2: String): Int = {
   // Iterative algorithm
@@ -82,3 +68,45 @@ def stringDistance(s1: String, s2: String): Int = {
 }
 
 dictionary.keys.reduceLeft((a, b) => if (stringDistance(a, "veu") < stringDistance(b, "veu")) a else b)
+
+val punctuation = List('.', ',', '!', '?', '*')
+
+val puncRegex = "[.?!*,'\\s]+"
+
+val s = "hello.boy? girl     j'''umm".replaceAll(puncRegex, " ")
+
+getClosestWordInDictionary("98blkhasf237eer")
+
+def tokenize(input: String) = {
+  val punctuationRegex = "[.?!*,'\\s]+"
+  val splitIt = input.replaceAll(punctuationRegex, " ").split(" ")
+  splitIt.map(s => {
+    val word = dictionary.getOrElse(s, getClosestWordInDictionary(s))
+
+    // match on the normalized form of the word
+    val normalized = dictionary.get(word)
+    normalized match {
+      case Some(s) =>
+        s match {
+          case "bonjour" => "bonjour" -> BONJOUR
+          case "je" => "je" -> JE
+          case "etre" => "etre" -> ETRE
+          case "vouloir" => "vouloir" -> VOULOIR
+          case "biere" => "biere" -> BIERE
+          case "croissant" => "croissant" -> CROISSANT
+          case "et" => "et" -> ET
+          case "ou" => "ou" -> OU
+          case "svp" => "svp" -> UNKNOWN
+          case s  => s -> UNKNOWN
+        }
+      case None =>
+        word match {
+          case s if s.startsWith("_") => s -> PSEUDO
+          case s if s.charAt(0).isDigit => s -> NUM
+          case s  => s -> UNKNOWN
+        }
+    }
+  })
+}
+
+tokenize("helo Je veux 12 bières et 4 croissants, stp.")
