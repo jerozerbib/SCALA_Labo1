@@ -11,6 +11,7 @@ object SpellChecker {
     */
   // TODO - Step 2
   def stringDistance(s1: String, s2: String): Int = {
+    // TODO: How tail-recursive version?
     // Recursive version
     def levLoop(s: String, t: String) : Int = {
       if (s.length == 0) {
