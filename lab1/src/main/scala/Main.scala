@@ -16,7 +16,7 @@ object Main extends App {
           println(s"Nombre de *clinks* pour un santé de $i personnes : ${calculateCombination(i, 2)}.")
         }
       }
-      case s => {
+      case s =>
         val tokenizer = new Tokenizer(s)
 
         // Tokenize the user input.
@@ -31,7 +31,6 @@ object Main extends App {
         } while (currentToken._2 != EOL)
 
         println("==================================================")
-      }
     }
   }
 }
