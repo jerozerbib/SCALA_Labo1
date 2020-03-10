@@ -6,7 +6,8 @@ import Utils.SpellChecker._
 
 class Tokenizer(input: String) {
   val punctuationRegex = "[.?!*,'\\s]+"
-  // TODO: Do we need to have variables for iterators
+  // We need to store the tokens list for the class as a variable since collections are immutable
+  // and we need to update it after we tokenize(). We also need to store the counter for the current token.
   var tokenList : Array[(String, Token)] = Array()
   var counter = 0
   /**
@@ -14,7 +15,9 @@ class Tokenizer(input: String) {
     */
   // TODO - Step 3
   def tokenize(): Unit = {
+    // Remove punctuation and multiple spaces and replace with simple whitespace
     val splitIt = input.replaceAll(punctuationRegex, " ").split(" ")
+    // Split the string by whitespace
     val tokens = splitIt.map(s => {
       val word = dictionary.getOrElse(s, getClosestWordInDictionary(s))
       // match on the normalized form of the word

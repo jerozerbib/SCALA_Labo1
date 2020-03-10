@@ -42,7 +42,8 @@ object SpellChecker {
   // TODO - Step 2
   def getClosestWordInDictionary(misspelledWord: String): String =
   // Check if misspelled word start with '_' if pseudonym or is a number (we assume it's only positive integer numbers)
-  // Can also check if misspelled.match("^-?\d+(\.\d*)?$") for negative, or floating point numbers.
+  // Can also check if misspelled.match("^-?\d+(\.\d*)?$") for negative, or floating point numbers, but we choose
+  // to deal only with simple integers.
     if (misspelledWord.charAt(0) == '_' || misspelledWord.forall(c => c.isDigit)) {
       misspelledWord
     } else {
